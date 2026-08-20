@@ -1,13 +1,29 @@
 from pathlib import Path
+import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-mk-tech-solutions-secret-key-change-in-production'
+# ── Security ──────────────────────────────────────────────────────────────────
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-mk-tech-solutions-secret-key-change-in-production'
+)
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'mktechsolutions.vercel.app',
+    '127.0.0.1',
+    'localhost',
+    '*',
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://mktechsolutions.vercel.app',
+]
+
+# ── Apps ──────────────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,8 +34,10 @@ INSTALLED_APPS = [
     'website',
 ]
 
+# ── Middleware ─────────────────────────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',       # ← serves static on Vercel
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -30,6 +48,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mktechsolutions.urls'
 
+# ── Templates ─────────────────────────────────────────────────────────────────
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -48,13 +67,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mktechsolutions.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# ── Database ──────────────────────────────────────────────────────────────────
+# On Vercel: set DATABASE_URL environment variable to your PostgreSQL connection string
+# Locally:   falls back to SQLite so development still works
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
+if DATABASE_URL:
+    # Production — PostgreSQL (Neon / Supabase / Railway / etc.)
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+else:
+    # Local development — SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# ── Auth validators ───────────────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -62,60 +98,48 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# ── Internationalisation ──────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
+TIME_ZONE     = 'UTC'
+USE_I18N      = True
+USE_TZ        = True
 
-STATIC_URL = '/static/'
+# ── Static files ──────────────────────────────────────────────────────────────
+STATIC_URL   = '/static/'
+STATIC_ROOT  = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = '/media/'
+# WhiteNoise compression + caching for production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ── Media files ───────────────────────────────────────────────────────────────
+MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ---- EMAIL — Gmail SMTP ----
-# STEP 1: Go to https://myaccount.google.com/security  → turn ON 2-Step Verification
-# STEP 2: Go to https://myaccount.google.com/apppasswords
-#         → create an App Password (select "Mail" + "Other") → copy the 16-char code
-# STEP 3: Paste that 16-char code into EMAIL_HOST_PASSWORD below (no spaces needed)
+# ── EMAIL — Gmail SMTP ────────────────────────────────────────────────────────
 EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          = 587
 EMAIL_USE_TLS       = True
-EMAIL_HOST_USER     = 'mktechsolution2026@gmail.com'
-EMAIL_HOST_PASSWORD = 'your_16char_app_password_here'   # <-- REPLACE THIS
+EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER', 'mktechsolution2026@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL  = 'MK Tech Solutions <mktechsolution2026@gmail.com>'
 COMPANY_EMAIL       = 'mktechsolution2026@gmail.com'
 
-# ---- LOGGING — prints email send success/errors to the terminal ----
+# ── Logging ───────────────────────────────────────────────────────────────────
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'simple': {
-            'format': '[{levelname}] {name}: {message}',
-            'style': '{',
-        },
+        'simple': {'format': '[{levelname}] {name}: {message}', 'style': '{'},
     },
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'simple'},
     },
     'loggers': {
-        'website': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'django.core.mail': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
+        'website':          {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
+        'django.core.mail': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False},
     },
 }
