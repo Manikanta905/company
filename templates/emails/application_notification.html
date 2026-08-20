@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  /* ── Reset ── */
+  body,table,td,p,a{margin:0;padding:0;border:0;font-family:Inter,Arial,sans-serif;}
+  body{background:#f1f5f9;}
+
+  /* ── Wrapper ── */
+  .wrap{max-width:640px;margin:32px auto;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+
+  /* ── Header ── */
+  .header{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#2563eb 100%);padding:36px 40px;}
+  .header-logo{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;margin-bottom:16px;}
+  .header-logo span{background:#2563eb;padding:2px 8px;border-radius:6px;margin-right:4px;}
+  .header h1{color:#ffffff;font-size:24px;font-weight:800;margin:0 0 6px;}
+  .header p{color:#93c5fd;font-size:14px;margin:0;}
+
+  /* ── Alert strip ── */
+  .alert-strip{background:#2563eb;padding:12px 40px;display:flex;align-items:center;gap:10px;}
+  .alert-strip span{color:#fff;font-size:13px;font-weight:600;}
+  .alert-dot{width:8px;height:8px;border-radius:50%;background:#fbbf24;flex-shrink:0;}
+
+  /* ── Body ── */
+  .body{padding:36px 40px;}
+
+  /* ── Section heading ── */
+  .sec{margin-bottom:28px;}
+  .sec-title{font-size:11px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #e2e8f0;}
+
+  /* ── Field rows ── */
+  .row{display:flex;gap:0;margin-bottom:9px;font-size:14px;line-height:1.5;}
+  .lbl{color:#64748b;font-weight:600;min-width:130px;flex-shrink:0;}
+  .val{color:#0f172a;word-break:break-word;}
+  .val a{color:#2563eb;text-decoration:none;}
+
+  /* ── Badge ── */
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 11px;border-radius:50px;text-transform:uppercase;letter-spacing:.06em;}
+  .badge-full_time {background:#eff6ff;color:#1d4ed8;}
+  .badge-part_time {background:#f5f3ff;color:#6d28d9;}
+  .badge-contract  {background:#fff7ed;color:#c2410c;}
+  .badge-internship{background:#fefce8;color:#a16207;}
+  .badge-remote    {background:#f0fdf4;color:#15803d;}
+
+  /* ── Text block (cover letter / description) ── */
+  .textblock{background:#f8fafc;border-left:4px solid #2563eb;border-radius:0 8px 8px 0;padding:16px 20px;font-size:13.5px;color:#334155;line-height:1.75;white-space:pre-wrap;word-break:break-word;margin-top:4px;}
+  .textblock-green{border-left-color:#16a34a;}
+  .textblock-gray {border-left-color:#94a3b8;}
+
+  /* ── Highlight box ── */
+  .highlight{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:18px 22px;margin-bottom:28px;}
+  .highlight strong{color:#1d4ed8;font-size:15px;}
+  .highlight p{color:#1e3a5f;font-size:13px;margin-top:4px;}
+
+  /* ── Resume CTA ── */
+  .resume-btn{display:inline-block;background:#16a34a;color:#fff;padding:9px 22px;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;margin-top:6px;}
+
+  /* ── Divider ── */
+  .divider{border:none;border-top:1px solid #e2e8f0;margin:28px 0;}
+
+  /* ── Admin CTA ── */
+  .cta{text-align:center;margin:32px 0 8px;}
+  .cta a{display:inline-block;background:#2563eb;color:#fff;padding:13px 32px;border-radius:9px;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:.01em;}
+  .cta a:hover{background:#1d4ed8;}
+
+  /* ── Footer ── */
+  .footer{background:#f8fafc;border-top:1px solid #e2e8f0;padding:22px 40px;text-align:center;font-size:11.5px;color:#94a3b8;line-height:1.6;}
+  .footer a{color:#64748b;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="header-logo"><span>MK</span>Tech Solutions</div>
+    <h1>📋 New Job Application</h1>
+    <p>Submitted via the MK Tech Solutions Careers Portal</p>
+  </div>
+
+  <!-- ===== ALERT STRIP ===== -->
+  <div class="alert-strip">
+    <div class="alert-dot"></div>
+    <span>Action required — review and respond to this applicant within 3–5 business days.</span>
+  </div>
+
+  <!-- ===== BODY ===== -->
+  <div class="body">
+
+    <!-- Quick summary box -->
+    <div class="highlight">
+      <strong>{{ application.full_name }}</strong> applied for <strong>{{ job.title }}</strong>
+      &nbsp;<span class="badge badge-{{ job.job_type }}">{{ job.get_job_type_display }}</span>
+      <p>Received on {{ application.applied_on|date:"l, F j, Y" }} at {{ application.applied_on|date:"g:i A" }} UTC</p>
+    </div>
+
+    <!-- ── SECTION 1: Position Details ── -->
+    <div class="sec">
+      <div class="sec-title">🏢 Position Details</div>
+      <div class="row"><span class="lbl">Job Title</span><span class="val"><strong>{{ job.title }}</strong></span></div>
+      <div class="row"><span class="lbl">Department</span><span class="val">{{ job.department }}</span></div>
+      <div class="row"><span class="lbl">Location</span><span class="val">{{ job.location }}</span></div>
+      <div class="row"><span class="lbl">Job Type</span><span class="val"><span class="badge badge-{{ job.job_type }}">{{ job.get_job_type_display }}</span></span></div>
+      {% if job.salary_range %}
+      <div class="row"><span class="lbl">Salary Range</span><span class="val">{{ job.salary_range }}</span></div>
+      {% endif %}
+      <div class="row"><span class="lbl">Posted On</span><span class="val">{{ job.posted_on|date:"F j, Y" }}</span></div>
+      {% if job.deadline %}
+      <div class="row"><span class="lbl">Deadline</span><span class="val">{{ job.deadline|date:"F j, Y" }}</span></div>
+      {% endif %}
+      <div class="row"><span class="lbl">Job Status</span><span class="val">{% if job.is_active %}✅ Active{% else %}❌ Closed{% endif %}</span></div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- ── SECTION 2: Applicant Details ── -->
+    <div class="sec">
+      <div class="sec-title">👤 Applicant Details</div>
+      <div class="row"><span class="lbl">Full Name</span><span class="val"><strong>{{ application.full_name }}</strong></span></div>
+      <div class="row"><span class="lbl">Email Address</span><span class="val"><a href="mailto:{{ application.email }}">{{ application.email }}</a></span></div>
+      <div class="row"><span class="lbl">Phone Number</span><span class="val">{{ application.phone }}</span></div>
+      <div class="row"><span class="lbl">Applied On</span><span class="val">{{ application.applied_on|date:"F j, Y" }} at {{ application.applied_on|date:"g:i A" }} UTC</span></div>
+      <div class="row">
+        <span class="lbl">Resume / CV</span>
+        <span class="val">
+          {% if application.resume_link %}
+            <a href="{{ application.resume_link }}" class="resume-btn" target="_blank">📄 View Resume →</a>
+          {% else %}
+            <em style="color:#94a3b8;">Not provided</em>
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- ── SECTION 3: Cover Letter ── -->
+    <div class="sec">
+      <div class="sec-title">✍️ Cover Letter</div>
+      <div class="textblock">{{ application.cover_letter }}</div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- ── SECTION 4: Full Job Description ── -->
+    <div class="sec">
+      <div class="sec-title">📄 Full Job Description</div>
+      <div class="textblock textblock-gray">{{ job.description }}</div>
+    </div>
+
+    {% if job.responsibilities %}
+    <hr class="divider"/>
+    <!-- ── SECTION 5: Responsibilities ── -->
+    <div class="sec">
+      <div class="sec-title">📌 Responsibilities</div>
+      <div class="textblock textblock-green">{{ job.responsibilities }}</div>
+    </div>
+    {% endif %}
+
+    <hr class="divider"/>
+
+    <!-- ── SECTION 6: Requirements ── -->
+    <div class="sec">
+      <div class="sec-title">✅ Requirements</div>
+      <div class="textblock textblock-green">{{ job.requirements }}</div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- ── SECTION 7: Submission Meta ── -->
+    <div class="sec">
+      <div class="sec-title">🕐 Submission Info</div>
+      <div class="row"><span class="lbl">Application ID</span><span class="val">#{{ application.pk }}</span></div>
+      <div class="row"><span class="lbl">Submitted</span><span class="val">{{ application.applied_on|date:"l, F j, Y \a\t g:i A" }} UTC</span></div>
+      <div class="row"><span class="lbl">Source</span><span class="val">MK Tech Solutions Careers Portal</span></div>
+      <div class="row"><span class="lbl">Notify Email</span><span class="val">mktechsolution2026@gmail.com</span></div>
+    </div>
+
+    <!-- ── Admin CTA ── -->
+    <div class="cta">
+      <a href="http://127.0.0.1:8000/admin/website/jobapplication/{{ application.pk }}/change/">
+        Open in Admin Panel →
+      </a>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <strong>MK Tech Solutions</strong> · 123 Innovation Drive, Tech City, TX 75001<br/>
+    📧 <a href="mailto:mktechsolution2026@gmail.com">mktechsolution2026@gmail.com</a> &nbsp;|&nbsp;
+    📞 +1 (800) 123-4567<br/><br/>
+    This email was automatically generated when a candidate submitted an application.<br/>
+    <strong>Reply to this email</strong> to contact <strong>{{ application.full_name }}</strong> directly at {{ application.email }}.
+  </div>
+
+</div>
+</body>
+</html>

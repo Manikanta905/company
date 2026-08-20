@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  body{font-family:Inter,Arial,sans-serif;background:#f1f5f9;margin:0;padding:0;}
+  .wrap{max-width:600px;margin:32px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.10);}
+  .header{background:linear-gradient(135deg,#1e3a5f 0%,#06b6d4 100%);padding:32px 36px;}
+  .header h1{color:#fff;font-size:22px;margin:0;}
+  .header p{color:#a5f3fc;font-size:14px;margin:6px 0 0;}
+  .body{padding:32px 36px;}
+  .section-title{font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin:0 0 12px;}
+  .field{display:flex;gap:12px;margin-bottom:10px;font-size:15px;}
+  .field-label{color:#64748b;font-weight:600;width:80px;flex-shrink:0;}
+  .field-value{color:#1e293b;}
+  .message-box{background:#f8fafc;border-left:4px solid #06b6d4;border-radius:0 8px 8px 0;padding:16px 20px;margin:8px 0 0;font-size:14px;color:#334155;line-height:1.7;white-space:pre-wrap;}
+  .cta{text-align:center;margin-top:28px;}
+  .btn{display:inline-block;background:#2563eb;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;}
+  .footer{background:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 36px;text-align:center;font-size:12px;color:#94a3b8;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>✉️ New Contact Form Message</h1>
+    <p>MK Tech Solutions — Website Contact Form</p>
+  </div>
+  <div class="body">
+    <div class="section-title">Sender Details</div>
+    <div class="field"><span class="field-label">Name</span><span class="field-value">{{ msg.name }}</span></div>
+    <div class="field"><span class="field-label">Email</span><span class="field-value"><a href="mailto:{{ msg.email }}" style="color:#2563eb;">{{ msg.email }}</a></span></div>
+    <div class="field"><span class="field-label">Subject</span><span class="field-value">{{ msg.subject }}</span></div>
+
+    <div class="section-title" style="margin-top:20px;">Message</div>
+    <div class="message-box">{{ msg.message }}</div>
+
+    <div class="cta">
+      <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}" class="btn">Reply to {{ msg.name }}</a>
+    </div>
+  </div>
+  <div class="footer">
+    Received via the MK Tech Solutions contact form.<br/>
+    Reply to this email to respond directly to the sender.
+  </div>
+</div>
+</body>
+</html>

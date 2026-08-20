@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us — MK Tech Solutions{% endblock %}
+{% block meta_description %}Get in touch with MK Tech Solutions. We'd love to hear about your project or answer any questions.{% endblock %}
+
+{% block content %}
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-badge">Let's Talk</span>
+    <h1 class="page-hero-title">Contact Us</h1>
+    <p class="page-hero-sub">
+      Have a project in mind? A question? Or just want to say hello?
+      We'll get back to you within one business day.
+    </p>
+  </div>
+</section>
+
+<!-- ===== CONTACT SECTION ===== -->
+<section class="section contact-section">
+  <div class="container contact-grid">
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <h2>Get in Touch</h2>
+      <p>
+        Whether you're looking to start a new project, want a free consultation,
+        or just have a question — we're here to help.
+      </p>
+
+      <div class="contact-details">
+        <div class="contact-detail-item">
+          <span class="cd-icon">📧</span>
+          <div>
+            <strong>Email</strong>
+            <p><a href="mailto:hello@mktechsolutions.com">hello@mktechsolutions.com</a></p>
+          </div>
+        </div>
+        <div class="contact-detail-item">
+          <span class="cd-icon">📞</span>
+          <div>
+            <strong>Phone</strong>
+            <p><a href="tel:+18001234567">+1 (800) 123-4567</a></p>
+          </div>
+        </div>
+        <div class="contact-detail-item">
+          <span class="cd-icon">📍</span>
+          <div>
+            <strong>Office</strong>
+            <p>123 Innovation Drive<br/>Tech City, TX 75001<br/>United States</p>
+          </div>
+        </div>
+        <div class="contact-detail-item">
+          <span class="cd-icon">🕐</span>
+          <div>
+            <strong>Business Hours</strong>
+            <p>Monday – Friday: 9 AM – 6 PM CST<br/>Saturday – Sunday: Closed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form-wrap">
+      <div class="contact-form-card">
+        <h3>Send Us a Message</h3>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.field.required %}<span class="required">*</span>{% endif %}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+            <ul class="field-errors">
+              {% for error in field.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== MAP PLACEHOLDER ===== -->
+<section class="map-section">
+  <div class="map-placeholder">
+    <span class="map-icon">🗺️</span>
+    <p>123 Innovation Drive, Tech City, TX 75001</p>
+    <a href="https://maps.google.com" target="_blank" rel="noopener" class="btn btn-outline">View on Google Maps</a>
+  </div>
+</section>
+
+{% endblock %}

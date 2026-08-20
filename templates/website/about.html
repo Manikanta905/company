@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us — MK Tech Solutions{% endblock %}
+{% block meta_description %}Learn about MK Tech Solutions — our story, mission, values, and the team behind our success.{% endblock %}
+
+{% block content %}
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-badge">Our Story</span>
+    <h1 class="page-hero-title">About MK Tech Solutions</h1>
+    <p class="page-hero-sub">
+      A passionate team of engineers, designers, and strategists on a mission to
+      make technology work harder for every business we serve.
+    </p>
+  </div>
+</section>
+
+<!-- ===== MISSION & VISION ===== -->
+<section class="section">
+  <div class="container mv-grid">
+    <div class="mv-card">
+      <div class="mv-icon">🎯</div>
+      <h3>Our Mission</h3>
+      <p>
+        To deliver innovative, reliable, and affordable technology solutions that empower
+        businesses of every size to compete in a digital-first world.
+      </p>
+    </div>
+    <div class="mv-card">
+      <div class="mv-icon">🔭</div>
+      <h3>Our Vision</h3>
+      <p>
+        To be the most trusted technology partner for forward-thinking companies across
+        the globe — from startups to enterprises.
+      </p>
+    </div>
+    <div class="mv-card">
+      <div class="mv-icon">💡</div>
+      <h3>Our Approach</h3>
+      <p>
+        We combine agile methodology with deep technical expertise to deliver projects
+        on time, on budget, and above expectations — every time.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPANY STORY ===== -->
+<section class="section story-section">
+  <div class="container story-grid">
+    <div class="story-text">
+      <span class="section-badge">How We Started</span>
+      <h2 class="section-title">Built from the Ground Up</h2>
+      <p>
+        MK Tech Solutions was founded in 2014 by a group of software engineers who saw
+        a gap in the market: businesses needed high-quality custom technology but couldn't
+        always afford enterprise-tier agencies.
+      </p>
+      <p>
+        Starting with a small team of five in a shared co-working space, we took on our
+        first client — a local logistics company that needed a route-optimization platform.
+        That project led to referrals, and referrals led to growth.
+      </p>
+      <p>
+        Today, MK Tech Solutions employs over 40 professionals across software engineering,
+        design, cloud infrastructure, and product management. We've shipped more than 150
+        products and serve clients across North America, Europe, and Asia.
+      </p>
+    </div>
+    <div class="story-timeline">
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <strong>2014</strong>
+          <p>Founded with 5 engineers. First client onboarded.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <strong>2016</strong>
+          <p>Expanded to mobile development. Reached 20 clients.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <strong>2019</strong>
+          <p>Launched cloud services practice. Team grew to 20+.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <strong>2022</strong>
+          <p>Opened second office. 100th project milestone hit.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot active"></div>
+        <div class="tl-content">
+          <strong>2026</strong>
+          <p>40+ team members. 150+ projects. Still growing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VALUES ===== -->
+<section class="section values-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">What Drives Us</span>
+      <h2 class="section-title">Our Core Values</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <span class="value-num">01</span>
+        <h4>Integrity</h4>
+        <p>We say what we mean and do what we say. Honest communication builds lasting trust.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-num">02</span>
+        <h4>Excellence</h4>
+        <p>Good enough is never good enough. We push for the highest quality in everything we ship.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-num">03</span>
+        <h4>Innovation</h4>
+        <p>We stay curious and adopt new technologies early to keep our clients ahead of the curve.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-num">04</span>
+        <h4>People First</h4>
+        <p>Our team and our clients are our greatest assets. We invest in both, always.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-num">05</span>
+        <h4>Collaboration</h4>
+        <p>Great products are built together. We work as an extension of your team, not a vendor.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-num">06</span>
+        <h4>Accountability</h4>
+        <p>We own our outcomes — successes and setbacks — and learn from both.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEAM ===== -->
+{% if team_members %}
+<section class="section team-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">The People</span>
+      <h2 class="section-title">Meet Our Team</h2>
+      <p class="section-subtitle">The talented people who make MK Tech Solutions run.</p>
+    </div>
+    <div class="team-grid">
+      {% for member in team_members %}
+      <div class="team-card">
+        <div class="team-avatar">
+          {% if member.photo %}
+            <img src="{{ member.photo.url }}" alt="{{ member.name }}" />
+          {% else %}
+            <div class="avatar-placeholder">{{ member.name|first }}</div>
+          {% endif %}
+        </div>
+        <h4>{{ member.name }}</h4>
+        <span class="team-role">{{ member.role }}</span>
+        {% if member.bio %}<p class="team-bio">{{ member.bio }}</p>{% endif %}
+        {% if member.linkedin_url %}
+          <a href="{{ member.linkedin_url }}" class="linkedin-link" target="_blank" rel="noopener">LinkedIn →</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="section team-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">The People</span>
+      <h2 class="section-title">Meet Our Team</h2>
+      <p class="section-subtitle">Add team members through the admin panel to showcase them here.</p>
+    </div>
+    <div class="team-placeholder-grid">
+      {% for i in "12345678" %}
+      <div class="team-card placeholder-card">
+        <div class="avatar-placeholder">?</div>
+        <div class="ph-line"></div>
+        <div class="ph-line short"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ===== CTA ===== -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>Interested in joining our team?</h2>
+    <p>We are always looking for talented people who love solving real problems with technology.</p>
+    <a href="{% url 'jobs' %}" class="btn btn-white">View Open Positions</a>
+  </div>
+</section>
+
+{% endblock %}

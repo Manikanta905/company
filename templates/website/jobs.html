@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Careers — MK Tech Solutions{% endblock %}
+{% block meta_description %}Explore open positions at MK Tech Solutions. Join our growing team of engineers, designers, and technologists.{% endblock %}
+
+{% block content %}
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-badge">Join Our Team</span>
+    <h1 class="page-hero-title">Careers at MK Tech Solutions</h1>
+    <p class="page-hero-sub">
+      We're building a world-class team. If you are passionate about technology
+      and want to do meaningful work, we want to hear from you.
+    </p>
+  </div>
+</section>
+
+<!-- ===== PERKS ===== -->
+<section class="section perks-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Why Work Here</span>
+      <h2 class="section-title">Life at MK Tech</h2>
+    </div>
+    <div class="perks-grid">
+      <div class="perk-card">
+        <span class="perk-icon">🏥</span>
+        <h4>Health Benefits</h4>
+        <p>Comprehensive medical, dental, and vision coverage for you and your family.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">🏡</span>
+        <h4>Flexible Work</h4>
+        <p>Hybrid and remote options. Work where you do your best thinking.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">📚</span>
+        <h4>Learning Budget</h4>
+        <p>$1,500/year for courses, certifications, conferences, and books.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">🌴</span>
+        <h4>Generous PTO</h4>
+        <p>20 days paid vacation plus public holidays and your birthday off.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">💰</span>
+        <h4>Competitive Pay</h4>
+        <p>Market-rate salaries reviewed annually with performance bonuses.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">🚀</span>
+        <h4>Growth Path</h4>
+        <p>Clear career ladders with mentorship from senior engineers and leaders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== JOB LISTINGS ===== -->
+<section class="section jobs-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Open Roles</span>
+      <h2 class="section-title">Current Openings</h2>
+    </div>
+
+    <!-- Filters -->
+    <form method="get" class="jobs-filter-form">
+      <div class="filter-group">
+        <label for="department">Department</label>
+        <select name="department" id="department" class="form-control" onchange="this.form.submit()">
+          <option value="">All Departments</option>
+          {% for dept in departments %}
+          <option value="{{ dept }}" {% if selected_department == dept %}selected{% endif %}>{{ dept }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="job_type">Job Type</label>
+        <select name="job_type" id="job_type" class="form-control" onchange="this.form.submit()">
+          <option value="">All Types</option>
+          {% for val, label in job_type_choices %}
+          <option value="{{ val }}" {% if selected_job_type == val %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% if selected_department or selected_job_type %}
+      <a href="{% url 'jobs' %}" class="btn btn-outline btn-sm">Clear Filters</a>
+      {% endif %}
+    </form>
+
+    <!-- Listings -->
+    {% if jobs %}
+    <div class="jobs-list">
+      {% for job in jobs %}
+      <div class="job-card">
+        <div class="job-card-left">
+          <h3 class="job-title">{{ job.title }}</h3>
+          <div class="job-meta">
+            <span class="job-meta-item">🏢 {{ job.department }}</span>
+            <span class="job-meta-item">📍 {{ job.location }}</span>
+            <span class="job-meta-item">📅 Posted {{ job.posted_on|date:"M d, Y" }}</span>
+            {% if job.deadline %}
+            <span class="job-meta-item deadline">⏰ Deadline {{ job.deadline|date:"M d, Y" }}</span>
+            {% endif %}
+          </div>
+          <p class="job-excerpt">{{ job.description|truncatewords:25 }}</p>
+        </div>
+        <div class="job-card-right">
+          <span class="job-type-badge {{ job.job_type }}">{{ job.get_job_type_display }}</span>
+          {% if job.salary_range %}
+          <span class="job-salary">{{ job.salary_range }}</span>
+          {% endif %}
+          <a href="{% url 'job_detail' job.pk %}" class="btn btn-primary btn-sm">View & Apply</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <span class="empty-icon">🔍</span>
+      <h3>No openings found</h3>
+      <p>
+        {% if selected_department or selected_job_type %}
+          Try adjusting your filters, or check back soon.
+        {% else %}
+          We don't have any open roles right now, but we're always growing.
+          <a href="{% url 'contact' %}">Send us your CV</a> and we'll keep you in mind.
+        {% endif %}
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ===== GENERAL APPLICATION ===== -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>Don't see your perfect role?</h2>
+    <p>We occasionally hire for roles not listed here. Drop us a message and let us know what you can do.</p>
+    <a href="{% url 'contact' %}" class="btn btn-white">Get in Touch</a>
+  </div>
+</section>
+
+{% endblock %}

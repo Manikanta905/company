@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MK Tech Solutions — Home{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container hero-content">
+    <span class="hero-badge">Welcome to MK Tech Solutions</span>
+    <h1 class="hero-title">
+      Innovative Technology<br/>
+      <span class="gradient-text">Solutions for Your Business</span>
+    </h1>
+    <p class="hero-subtitle">
+      We design, build, and scale software products that help companies grow faster,
+      work smarter, and deliver outstanding experiences to their customers.
+    </p>
+    <div class="hero-cta">
+      <a href="{% url 'contact' %}" class="btn btn-primary">Get in Touch</a>
+      <a href="{% url 'about' %}"   class="btn btn-outline">Learn More</a>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats-bar">
+  <div class="container stats-grid">
+    <div class="stat-item">
+      <span class="stat-number">150+</span>
+      <span class="stat-label">Projects Delivered</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">80+</span>
+      <span class="stat-label">Happy Clients</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">10+</span>
+      <span class="stat-label">Years Experience</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">40+</span>
+      <span class="stat-label">Team Members</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="section services">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">What We Do</span>
+      <h2 class="section-title">Our Core Services</h2>
+      <p class="section-subtitle">
+        End-to-end technology services tailored to your unique business needs.
+      </p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">💻</div>
+        <h3>Web Development</h3>
+        <p>Custom web applications built with modern frameworks — fast, secure, and scalable.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Mobile Applications</h3>
+        <p>Native and cross-platform mobile apps for iOS and Android that users love.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">☁️</div>
+        <h3>Cloud Solutions</h3>
+        <p>Cloud architecture, migration, and managed services on AWS, Azure, and GCP.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔒</div>
+        <h3>Cybersecurity</h3>
+        <p>Protect your business with comprehensive security audits, monitoring, and response.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Data & Analytics</h3>
+        <p>Turn raw data into actionable insights with BI dashboards and AI/ML pipelines.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🛠️</div>
+        <h3>IT Consulting</h3>
+        <p>Strategic technology roadmaps and hands-on consulting to accelerate your growth.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY US ===== -->
+<section class="section why-us">
+  <div class="container why-grid">
+    <div class="why-text">
+      <span class="section-badge">Why MK Tech</span>
+      <h2 class="section-title">We Build More Than Software</h2>
+      <p>
+        At MK Tech Solutions, we believe technology should solve real problems. Our team
+        brings together deep technical expertise and a genuine passion for your success —
+        from the first idea to launch and beyond.
+      </p>
+      <ul class="why-list">
+        <li><span class="check">✔</span> Agile delivery — on time, every time</li>
+        <li><span class="check">✔</span> Transparent communication throughout</li>
+        <li><span class="check">✔</span> Post-launch support included</li>
+        <li><span class="check">✔</span> Dedicated project managers</li>
+        <li><span class="check">✔</span> Security-first engineering practices</li>
+      </ul>
+      <a href="{% url 'about' %}" class="btn btn-primary" style="margin-top:1.5rem;">Meet the Team</a>
+    </div>
+    <div class="why-visual">
+      <div class="visual-card vc1">
+        <span class="vc-icon">🚀</span>
+        <strong>Fast Delivery</strong>
+        <p>Sprints that keep you moving</p>
+      </div>
+      <div class="visual-card vc2">
+        <span class="vc-icon">🤝</span>
+        <strong>Trusted Partnership</strong>
+        <p>Long-term client relationships</p>
+      </div>
+      <div class="visual-card vc3">
+        <span class="vc-icon">🏆</span>
+        <strong>Award-Winning</strong>
+        <p>Recognized for excellence</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OPEN ROLES TEASER ===== -->
+{% if active_jobs %}
+<section class="section open-roles">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Join Us</span>
+      <h2 class="section-title">Open Positions</h2>
+      <p class="section-subtitle">We are growing — come build the future with us.</p>
+    </div>
+    <div class="jobs-teaser-grid">
+      {% for job in active_jobs %}
+      <a href="{% url 'job_detail' job.pk %}" class="job-teaser-card">
+        <div class="job-teaser-top">
+          <h3>{{ job.title }}</h3>
+          <span class="job-badge">{{ job.get_job_type_display }}</span>
+        </div>
+        <p class="job-dept">{{ job.department }} · {{ job.location }}</p>
+        <span class="job-apply-link">View &amp; Apply →</span>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="text-center" style="margin-top:2rem;">
+      <a href="{% url 'jobs' %}" class="btn btn-outline">See All Open Roles</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>Ready to start your next project?</h2>
+    <p>Let's talk about how MK Tech Solutions can help you reach your goals.</p>
+    <a href="{% url 'contact' %}" class="btn btn-white">Contact Us Today</a>
+  </div>
+</section>
+
+{% endblock %}

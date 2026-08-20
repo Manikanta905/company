@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Application Received — MK Tech Solutions{% endblock %}
+
+{% block content %}
+<section class="success-page">
+  <div class="container success-wrap">
+
+    <div class="success-icon-ring">
+      <span class="success-icon">✅</span>
+    </div>
+
+    <h1 class="success-title">Application Submitted!</h1>
+    <p class="success-lead">
+      Thank you for your interest in joining MK Tech Solutions.
+      We've received your application and our team will review it shortly.
+    </p>
+
+    <!-- What happens next -->
+    <div class="next-steps">
+      <h2>What happens next?</h2>
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <div>
+            <strong>Application Review</strong>
+            <p>Our hiring team carefully reviews every application we receive — usually within 3–5 business days.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <div>
+            <strong>We'll Reach Out</strong>
+            <p>If your profile matches what we're looking for, a team member will contact you by email or phone to schedule a conversation.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <div>
+            <strong>Interview Process</strong>
+            <p>We keep it simple — typically a brief intro call followed by a technical or role-specific interview.</p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">4</span>
+          <div>
+            <strong>Decision & Offer</strong>
+            <p>We aim to make decisions quickly. Successful candidates receive a detailed offer within days of the final interview.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Team note -->
+    <div class="team-note">
+      <div class="team-avatars">
+        <div class="ta ta1">M</div>
+        <div class="ta ta2">A</div>
+        <div class="ta ta3">J</div>
+      </div>
+      <div class="team-note-text">
+        <strong>Our team will be in touch with you soon.</strong>
+        <p>
+          In the meantime, feel free to learn more about us or browse other open roles.
+          Questions? Reach us at
+          <a href="mailto:mktechsolution2026@gmail.com">mktechsolution2026@gmail.com</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="success-actions">
+      <a href="{% url 'jobs' %}"    class="btn btn-primary">Browse More Roles</a>
+      <a href="{% url 'home' %}"    class="btn btn-outline">Back to Home</a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ job.title }} — MK Tech Solutions{% endblock %}
+{% block meta_description %}Apply for {{ job.title }} at MK Tech Solutions. {{ job.department }} · {{ job.location }}.{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <a href="{% url 'jobs' %}" class="back-link">← Back to Careers</a>
+    <h1 class="page-hero-title">{{ job.title }}</h1>
+    <div class="job-hero-meta">
+      <span>🏢 {{ job.department }}</span>
+      <span>📍 {{ job.location }}</span>
+      <span class="job-type-badge {{ job.job_type }}">{{ job.get_job_type_display }}</span>
+      {% if job.salary_range %}
+      <span class="job-salary">{{ job.salary_range }}</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container job-detail-grid">
+
+    <!-- Job Info -->
+    <div class="job-detail-main">
+      <div class="job-section-block">
+        <h2>About this Role</h2>
+        <p>{{ job.description|linebreaks }}</p>
+      </div>
+
+      {% if job.responsibilities %}
+      <div class="job-section-block">
+        <h2>Responsibilities</h2>
+        <p>{{ job.responsibilities|linebreaks }}</p>
+      </div>
+      {% endif %}
+
+      <div class="job-section-block">
+        <h2>Requirements</h2>
+        <p>{{ job.requirements|linebreaks }}</p>
+      </div>
+    </div>
+
+    <!-- Application Form -->
+    <aside class="job-apply-sidebar">
+      <div class="apply-card">
+        <h3>Apply for this Position</h3>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.field.required %}<span class="required">*</span>{% endif %}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+            <ul class="field-errors">
+              {% for error in field.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary btn-full">Submit Application</button>
+        </form>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+{% endblock %}

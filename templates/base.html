@@ -1,0 +1,706 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}MK Tech Solutions{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}MK Tech Solutions — Innovative software and technology services.{% endblock %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="{% url 'home' %}" class="brand">
+        <span class="brand-mk">MK</span><span class="brand-text"> Tech Solutions</span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="{% url 'home' %}"    class="nav-link {% if page == 'home'    %}active{% endif %}">Home</a>
+        <a href="{% url 'about' %}"   class="nav-link {% if page == 'about'   %}active{% endif %}">About</a>
+        <a href="{% url 'jobs' %}"    class="nav-link {% if page == 'jobs'    %}active{% endif %}">Careers</a>
+        <a href="{% url 'contact' %}" class="nav-link {% if page == 'contact' %}active{% endif %}">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MESSAGES ===== -->
+  {% if messages %}
+  <div class="messages-wrapper">
+    {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }}">
+      {{ msg }}
+      <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <a href="{% url 'home' %}" class="brand">
+          <span class="brand-mk">MK</span><span class="brand-text"> Tech Solutions</span>
+        </a>
+        <p class="footer-tagline">Building tomorrow's technology, today.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Company</h4>
+        <ul class="footer-links">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'jobs' %}">Careers</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Services</h4>
+        <ul class="footer-links">
+          <li><a href="#">Web Development</a></li>
+          <li><a href="#">Mobile Apps</a></li>
+          <li><a href="#">Cloud Solutions</a></li>
+          <li><a href="#">IT Consulting</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Contact</h4>
+        <ul class="footer-links">
+          <li>📧 hello@mktechsolutions.com</li>
+          <li>📞 +1 (800) 123-4567</li>
+          <li>📍 123 Innovation Drive, Tech City, TX 75001</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 MK Tech Solutions. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== AI CHAT WIDGET ===== -->
+
+  <!-- Floating button -->
+  <button class="ai-chat-fab" id="aiChatFab" aria-label="Open AI Chat">
+    <span class="fab-icon-open">
+      <!-- Chat bubble SVG -->
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    </span>
+    <span class="fab-icon-close" style="display:none;">
+      <!-- X SVG -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </span>
+    <span class="fab-pulse"></span>
+  </button>
+
+  <!-- Chat window -->
+  <div class="ai-chat-window" id="aiChatWindow" aria-hidden="true">
+
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">
+          <span>MK</span>
+          <span class="online-dot"></span>
+        </div>
+        <div>
+          <div class="chat-header-name">MK Tech Assistant</div>
+          <div class="chat-header-status">🟢 Online — typically replies instantly</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" id="chatCloseBtn" aria-label="Close chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Messages area -->
+    <div class="chat-messages" id="chatMessages">
+      <!-- Initial bot message -->
+      <div class="chat-msg bot">
+        <div class="msg-avatar">MK</div>
+        <div class="msg-bubble">
+          👋 Hi! I'm the <strong>MK Tech Assistant</strong>.<br/><br/>
+          I can help you with:
+          <ul class="chat-list">
+            <li>🏢 Company &amp; services info</li>
+            <li>💼 Open job positions</li>
+            <li>📧 How to apply</li>
+            <li>📞 Contact &amp; location</li>
+          </ul>
+          What can I help you with today?
+        </div>
+      </div>
+
+      <!-- Quick reply chips -->
+      <div class="quick-replies" id="quickReplies">
+        <button class="chip" data-q="What services do you offer?">Our Services</button>
+        <button class="chip" data-q="What jobs are available?">Open Jobs</button>
+        <button class="chip" data-q="How do I apply?">How to Apply</button>
+        <button class="chip" data-q="How can I contact you?">Contact Us</button>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="chat-input-area">
+      <input
+        type="text"
+        id="chatInput"
+        class="chat-input"
+        placeholder="Type your message..."
+        autocomplete="off"
+        maxlength="300"
+      />
+      <button class="chat-send-btn" id="chatSendBtn" aria-label="Send message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="chat-footer-note">Powered by MK Tech Solutions AI</div>
+  </div>
+
+  <script>
+    // ── Mobile nav toggle ──
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      hamburger.classList.toggle('active');
+    });
+
+    // ════════════════════════════════════════════
+    //   AI CHAT WIDGET
+    // ════════════════════════════════════════════
+    const fab          = document.getElementById('aiChatFab');
+    const chatWindow   = document.getElementById('aiChatWindow');
+    const closeBtn     = document.getElementById('chatCloseBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput    = document.getElementById('chatInput');
+    const sendBtn      = document.getElementById('chatSendBtn');
+    const quickReplies = document.getElementById('quickReplies');
+    const fabOpen      = fab.querySelector('.fab-icon-open');
+    const fabClose     = fab.querySelector('.fab-icon-close');
+
+    let isOpen = false;
+
+    // ── Toggle chat window ──
+    function toggleChat() {
+      isOpen = !isOpen;
+      chatWindow.classList.toggle('open', isOpen);
+      chatWindow.setAttribute('aria-hidden', String(!isOpen));
+      fabOpen.style.display  = isOpen ? 'none'         : 'flex';
+      fabClose.style.display = isOpen ? 'flex'         : 'none';
+      if (isOpen) { chatInput.focus(); scrollToBottom(); }
+    }
+
+    fab.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', toggleChat);
+
+    // ── Quick reply chips ──
+    quickReplies.addEventListener('click', e => {
+      if (e.target.classList.contains('chip')) {
+        const q = e.target.getAttribute('data-q');
+        quickReplies.style.display = 'none';
+        addMessage(q, 'user');
+        setTimeout(() => addBotReply(q), 600);
+      }
+    });
+
+    // ── Send on button click or Enter ──
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      quickReplies.style.display = 'none';
+      addMessage(text, 'user');
+      chatInput.value = '';
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        addBotReply(text);
+      }, 900);
+    }
+
+    // ── Add a message bubble ──
+    function addMessage(text, sender) {
+      const wrap = document.createElement('div');
+      wrap.className = `chat-msg ${sender}`;
+
+      if (sender === 'bot') {
+        wrap.innerHTML = `<div class="msg-avatar">MK</div><div class="msg-bubble">${text}</div>`;
+      } else {
+        wrap.innerHTML = `<div class="msg-bubble">${escHtml(text)}</div>`;
+      }
+      chatMessages.appendChild(wrap);
+      scrollToBottom();
+    }
+
+    // ── Typing indicator ──
+    function showTyping() {
+      const wrap = document.createElement('div');
+      wrap.className = 'chat-msg bot typing-indicator-wrap';
+      wrap.id = 'typingIndicator';
+      wrap.innerHTML = `
+        <div class="msg-avatar">MK</div>
+        <div class="msg-bubble typing-bubble">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>`;
+      chatMessages.appendChild(wrap);
+      scrollToBottom();
+    }
+    function removeTyping() {
+      const el = document.getElementById('typingIndicator');
+      if (el) el.remove();
+    }
+
+    // ── Scroll to bottom ──
+    function scrollToBottom() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // ── Escape HTML ──
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ════════════════════════════════════════════
+    //   BOT KNOWLEDGE BASE — MK Tech Solutions
+    // ════════════════════════════════════════════
+    function addBotReply(input) {
+      const q = input.toLowerCase();
+      let reply = '';
+
+      // ── Services ──
+      if (q.match(/service|what do you do|offer|provide|help/)) {
+        reply = `We offer a full range of technology services:<br/><br/>
+          💻 <strong>Web Development</strong> — Custom apps with modern frameworks<br/>
+          📱 <strong>Mobile Apps</strong> — iOS &amp; Android, native &amp; cross-platform<br/>
+          ☁️ <strong>Cloud Solutions</strong> — AWS, Azure, GCP architecture<br/>
+          🔒 <strong>Cybersecurity</strong> — Audits, monitoring &amp; response<br/>
+          📊 <strong>Data &amp; Analytics</strong> — BI dashboards &amp; AI/ML pipelines<br/>
+          🛠️ <strong>IT Consulting</strong> — Strategic technology roadmaps<br/><br/>
+          Want to discuss a project? <a href="/contact/" style="color:#2563eb;font-weight:600;">Contact us →</a>`;
+
+      // ── Jobs / Careers ──
+      } else if (q.match(/job|career|hire|hiring|position|vacancy|role|opening|work|employ/)) {
+        reply = `We're always looking for talented people! 🚀<br/><br/>
+          Current open positions include roles in:<br/>
+          • Engineering (Full-Stack, Cloud, Cybersecurity)<br/>
+          • Design (UI/UX)<br/>
+          • Internships for students<br/><br/>
+          👉 <a href="/careers/" style="color:#2563eb;font-weight:600;">View all open positions →</a>`;
+
+      // ── How to apply ──
+      } else if (q.match(/apply|application|submit|cv|resume/)) {
+        reply = `Applying is simple! Here's how:<br/><br/>
+          1️⃣ Go to our <a href="/careers/" style="color:#2563eb;font-weight:600;">Careers page</a><br/>
+          2️⃣ Browse and click on any open role<br/>
+          3️⃣ Fill in your name, email, phone &amp; cover letter<br/>
+          4️⃣ Add your resume link (Google Drive / LinkedIn)<br/>
+          5️⃣ Click <strong>Submit Application</strong><br/><br/>
+          Our team reviews every application within <strong>3–5 business days</strong>.`;
+
+      // ── About company ──
+      } else if (q.match(/about|company|who are|history|story|founded|how old|when/)) {
+        reply = `<strong>MK Tech Solutions</strong> was founded in 2014 by a group of passionate software engineers. 🏢<br/><br/>
+          Today we have:<br/>
+          • 🧑‍💻 <strong>40+ team members</strong><br/>
+          • 📦 <strong>150+ projects delivered</strong><br/>
+          • 😊 <strong>80+ happy clients</strong><br/>
+          • 🌍 Clients across North America, Europe &amp; Asia<br/><br/>
+          <a href="/about/" style="color:#2563eb;font-weight:600;">Read our full story →</a>`;
+
+      // ── Contact ──
+      } else if (q.match(/contact|reach|email|phone|address|location|office|where/)) {
+        reply = `You can reach us through multiple channels:<br/><br/>
+          📧 <strong>Email:</strong> <a href="mailto:mktechsolution2026@gmail.com" style="color:#2563eb;">mktechsolution2026@gmail.com</a><br/>
+          📞 <strong>Phone:</strong> +1 (800) 123-4567<br/>
+          📍 <strong>Office:</strong> 123 Innovation Drive, Tech City, TX 75001<br/>
+          🕐 <strong>Hours:</strong> Mon–Fri, 9 AM – 6 PM CST<br/><br/>
+          <a href="/contact/" style="color:#2563eb;font-weight:600;">Send us a message →</a>`;
+
+      // ── Technologies ──
+      } else if (q.match(/tech|technolog|stack|python|django|react|aws|cloud|framework/)) {
+        reply = `We work with a wide range of modern technologies:<br/><br/>
+          🐍 <strong>Backend:</strong> Python, Django, Node.js, REST APIs<br/>
+          ⚛️ <strong>Frontend:</strong> React, Vue.js, HTML/CSS/JS<br/>
+          📱 <strong>Mobile:</strong> React Native, Flutter, Swift, Kotlin<br/>
+          ☁️ <strong>Cloud:</strong> AWS, Azure, Google Cloud, Docker, Kubernetes<br/>
+          🗄️ <strong>Database:</strong> PostgreSQL, MySQL, MongoDB, Redis`;
+
+      // ── Pricing ──
+      } else if (q.match(/price|cost|rate|charge|fee|budget|quote/)) {
+        reply = `Every project is different, so we provide <strong>custom quotes</strong> based on your specific needs and scope. 💰<br/><br/>
+          The best way to get a price estimate is to reach out and tell us about your project.<br/><br/>
+          <a href="/contact/" style="color:#2563eb;font-weight:600;">Request a free consultation →</a>`;
+
+      // ── Team ──
+      } else if (q.match(/team|people|staff|employee|founder|ceo|cto/)) {
+        reply = `Our team is led by experienced founders and industry experts:<br/><br/>
+          👤 <strong>Marcus Kim</strong> — CEO &amp; Co-Founder (15+ years in enterprise software)<br/>
+          👤 <strong>Aisha Patel</strong> — CTO &amp; Co-Founder (technical vision &amp; engineering)<br/>
+          👤 <strong>Jordan Rivera</strong> — Head of Engineering<br/>
+          👤 <strong>Priya Singh</strong> — Head of Design<br/><br/>
+          <a href="/about/" style="color:#2563eb;font-weight:600;">Meet the full team →</a>`;
+
+      // ── Greetings ──
+      } else if (q.match(/^(hi|hello|hey|good morning|good afternoon|good evening|howdy|sup|what's up|hola)/)) {
+        reply = `Hello! 👋 Great to hear from you!<br/><br/>
+          I'm the MK Tech Solutions AI Assistant. I can answer questions about our <strong>services</strong>, <strong>open jobs</strong>, <strong>how to apply</strong>, and more.<br/><br/>
+          What would you like to know?`;
+
+      // ── Thanks ──
+      } else if (q.match(/thank|thanks|thank you|great|awesome|perfect|helpful/)) {
+        reply = `You're welcome! 😊<br/><br/>
+          Is there anything else I can help you with? Feel free to ask anything about MK Tech Solutions.`;
+
+      // ── Bye ──
+      } else if (q.match(/bye|goodbye|see you|take care|cya/)) {
+        reply = `Goodbye! 👋 Have a great day!<br/><br/>
+          Don't hesitate to come back if you have more questions. We're always here!`;
+
+      // ── Default fallback ──
+      } else {
+        reply = `Thanks for your message! 🤔<br/><br/>
+          I'm best at answering questions about:<br/>
+          • Our <strong>services</strong> and <strong>technologies</strong><br/>
+          • <strong>Open job positions</strong><br/>
+          • <strong>How to apply</strong><br/>
+          • <strong>Contact &amp; location</strong><br/><br/>
+          For anything else, please <a href="/contact/" style="color:#2563eb;font-weight:600;">contact our team directly →</a>`;
+      }
+
+      addMessage(reply, 'bot');
+    }
+  </script>
+
+  <style>
+    /* ════════════════════════════════════════════
+       AI CHAT WIDGET STYLES
+    ════════════════════════════════════════════ */
+
+    /* ── FAB button ── */
+    .ai-chat-fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,99,235,.5);
+      transition: transform .25s ease, box-shadow .25s ease;
+      outline: none;
+    }
+    .ai-chat-fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 32px rgba(37,99,235,.6);
+    }
+    .fab-icon-open, .fab-icon-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pulse ring */
+    .fab-pulse {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid rgba(37,99,235,.4);
+      animation: fabPulse 2.5s infinite;
+      pointer-events: none;
+    }
+    @keyframes fabPulse {
+      0%   { transform: scale(1);   opacity: .7; }
+      70%  { transform: scale(1.5); opacity: 0; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* ── Chat window ── */
+    .ai-chat-window {
+      position: fixed;
+      bottom: 100px;
+      right: 28px;
+      z-index: 9998;
+      width: 360px;
+      max-height: 540px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 16px 56px rgba(0,0,0,.18);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      /* Hidden by default */
+      opacity: 0;
+      transform: translateY(20px) scale(.97);
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .ai-chat-window.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+
+    /* ── Header ── */
+    .chat-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #2563eb 100%);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .chat-header-left { display: flex; align-items: center; gap: 10px; }
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 800;
+      color: #fff;
+      position: relative;
+      flex-shrink: 0;
+      font-family: Inter, sans-serif;
+    }
+    .online-dot {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      border: 2px solid #1e3a5f;
+    }
+    .chat-header-name   { color: #fff;    font-size: .9rem; font-weight: 700; font-family: Inter, sans-serif; }
+    .chat-header-status { color: #93c5fd; font-size: .72rem; margin-top: 1px; font-family: Inter, sans-serif; }
+    .chat-close-btn {
+      background: rgba(255,255,255,.12);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+    .chat-close-btn:hover { background: rgba(255,255,255,.22); }
+
+    /* ── Messages ── */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f8fafc;
+      scroll-behavior: smooth;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+    /* Message row */
+    .chat-msg {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      animation: msgIn .2s ease;
+    }
+    @keyframes msgIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+    .chat-msg.user { flex-direction: row-reverse; }
+
+    /* Avatar (bot only) */
+    .msg-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .6rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      font-family: Inter, sans-serif;
+    }
+
+    /* Bubble */
+    .msg-bubble {
+      max-width: 78%;
+      padding: 10px 13px;
+      border-radius: 16px;
+      font-size: .875rem;
+      line-height: 1.55;
+      font-family: Inter, sans-serif;
+      word-break: break-word;
+    }
+    .chat-msg.bot  .msg-bubble {
+      background: #fff;
+      color: #1e293b;
+      border-radius: 4px 16px 16px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .chat-msg.user .msg-bubble {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border-radius: 16px 4px 16px 16px;
+    }
+    .msg-bubble a { color: inherit; }
+    .chat-msg.bot .msg-bubble a { color: #2563eb; }
+
+    /* Chat list inside bubble */
+    .chat-list { margin: 6px 0 0 4px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+    .chat-list li::before { content: ''; }
+
+    /* ── Typing dots ── */
+    .typing-bubble {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #94a3b8;
+      animation: dotBounce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes dotBounce {
+      0%,80%,100% { transform: scale(1);   opacity: .5; }
+      40%          { transform: scale(1.3); opacity: 1;  }
+    }
+
+    /* ── Quick replies ── */
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 14px 10px 42px;
+    }
+    .chip {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 50px;
+      padding: 5px 12px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .chip:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+    /* ── Input area ── */
+    .chat-input-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid #e2e8f0;
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 50px;
+      padding: 9px 16px;
+      font-size: .875rem;
+      font-family: Inter, sans-serif;
+      outline: none;
+      color: #1e293b;
+      background: #f8fafc;
+      transition: border-color .2s;
+    }
+    .chat-input:focus { border-color: #2563eb; background: #fff; }
+    .chat-send-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .chat-send-btn:hover { transform: scale(1.08); box-shadow: 0 4px 12px rgba(37,99,235,.4); }
+
+    /* ── Footer note ── */
+    .chat-footer-note {
+      text-align: center;
+      font-size: .7rem;
+      color: #94a3b8;
+      padding: 4px 0 8px;
+      background: #fff;
+      font-family: Inter, sans-serif;
+      flex-shrink: 0;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      .ai-chat-window {
+        width: calc(100vw - 24px);
+        right: 12px;
+        bottom: 90px;
+        max-height: 70vh;
+      }
+      .ai-chat-fab { bottom: 18px; right: 18px; }
+    }
+  </style>
+</body>
+</html>
