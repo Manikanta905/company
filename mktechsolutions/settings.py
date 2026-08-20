@@ -4,26 +4,20 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ── Security ──────────────────────────────────────────────────────────────────
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
-    'django-insecure-mk-tech-solutions-secret-key-change-in-production'
+    'django-insecure-mk-tech-solutions-key-change-in-prod-2026'
 )
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
-    'mktechsolutions.vercel.app',
-    '127.0.0.1',
-    'localhost',
-    '*',
-]
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://mktechsolutions.vercel.app',
+    'https://*.vercel.app',
 ]
 
-# ── Apps ──────────────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,10 +28,9 @@ INSTALLED_APPS = [
     'website',
 ]
 
-# ── Middleware ─────────────────────────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',       # ← serves static on Vercel
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -48,7 +41,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mktechsolutions.urls'
 
-# ── Templates ─────────────────────────────────────────────────────────────────
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -68,21 +60,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wsgi.application'
 
 # ── Database ──────────────────────────────────────────────────────────────────
-# On Vercel: set DATABASE_URL environment variable to your PostgreSQL connection string
-# Locally:   falls back to SQLite so development still works
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
 if DATABASE_URL:
-    # Production — PostgreSQL (Neon / Supabase / Railway / etc.)
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
-            conn_health_checks=True,
         )
     }
 else:
-    # Local development — SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -90,7 +77,6 @@ else:
         }
     }
 
-# ── Auth validators ───────────────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -98,27 +84,23 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ── Internationalisation ──────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE     = 'UTC'
 USE_I18N      = True
 USE_TZ        = True
 
-# ── Static files ──────────────────────────────────────────────────────────────
-STATIC_URL   = '/static/'
-STATIC_ROOT  = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# WhiteNoise — use simple compressed storage (no manifest needed on Vercel)
+# ── Static ────────────────────────────────────────────────────────────────────
+STATIC_URL         = '/static/'
+STATIC_ROOT        = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS   = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# ── Media files ───────────────────────────────────────────────────────────────
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ── EMAIL — Gmail SMTP ────────────────────────────────────────────────────────
+# ── Email ─────────────────────────────────────────────────────────────────────
 EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          = 587
