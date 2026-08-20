@@ -65,7 +65,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mktechsolutions.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 # ── Database ──────────────────────────────────────────────────────────────────
 # On Vercel: set DATABASE_URL environment variable to your PostgreSQL connection string

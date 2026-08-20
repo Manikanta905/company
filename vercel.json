@@ -1,15 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "mktechsolutions/wsgi.py",
-      "use": "@vercel/python"
-    }
-  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "mktechsolutions/wsgi.py"
+      "dest": "wsgi.py"
     }
   ]
 }
