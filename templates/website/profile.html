@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile — MK Tech Solutions{% endblock %}
+{% block meta_description %}View your MK Tech Solutions account profile.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <span class="section-badge">Account</span>
+    <h1 class="page-hero-title">Your Profile</h1>
+    <p class="page-hero-sub">Manage your account information.</p>
+  </div>
+</section>
+
+<section class="section auth-section">
+  <div class="container">
+    <div class="auth-card profile-card">
+      <div class="profile-avatar" aria-hidden="true">
+        <svg class="profile-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="3.5"></circle>
+          <path d="M5.5 20c.7-3.1 3.1-5 6.5-5s5.8 1.9 6.5 5"></path>
+        </svg>
+      </div>
+      <div class="profile-detail"><span>Username</span><strong>{{ user.username }}</strong></div>
+      <div class="profile-detail"><span>Email</span><strong>{{ user.email|default:'Not provided' }}</strong></div>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline btn-full">Log out</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

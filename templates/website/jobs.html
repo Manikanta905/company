@@ -70,6 +70,16 @@
 
     <!-- Filters -->
     <form method="get" class="jobs-filter-form">
+      <div class="filter-group search-filter-group">
+        <label for="job-search">Search openings</label>
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
+          <input type="search" name="q" id="job-search" class="form-control" value="{{ search_query }}" placeholder="Title, skill, or location" />
+        </div>
+      </div>
       <div class="filter-group">
         <label for="department">Department</label>
         <select name="department" id="department" class="form-control" onchange="this.form.submit()">
@@ -88,7 +98,7 @@
           {% endfor %}
         </select>
       </div>
-      {% if selected_department or selected_job_type %}
+      {% if search_query or selected_department or selected_job_type %}
       <a href="{% url 'jobs' %}" class="btn btn-outline btn-sm">Clear Filters</a>
       {% endif %}
     </form>
@@ -125,7 +135,7 @@
       <span class="empty-icon">🔍</span>
       <h3>No openings found</h3>
       <p>
-        {% if selected_department or selected_job_type %}
+        {% if search_query or selected_department or selected_job_type %}
           Try adjusting your filters, or check back soon.
         {% else %}
           We don't have any open roles right now, but we're always growing.

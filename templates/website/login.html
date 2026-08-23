@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Login — MK Tech Solutions{% endblock %}
+{% block meta_description %}Log in to your MK Tech Solutions account.{% endblock %}
+
+{% block content %}
+<section class="section auth-section">
+  <div class="container">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <p class="auth-subtitle">Log in to continue to MK Tech Solutions.</p>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next_url }}" />
+        {% if form.non_field_errors %}
+        <ul class="errorlist">
+          {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+        {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label }}{% if field.field.required %}<span class="required">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+          <ul class="field-errors">
+            {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-full">Log in</button>
+      </form>
+      <p class="auth-footer">New here? <a href="{% url 'signup' %}">Create an account</a></p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,10 +1,14 @@
 import logging
+from urllib.parse import urlparse
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
 from .models import JobListing, TeamMember
-from .forms import JobApplicationForm, ContactForm
+from .forms import JobApplicationForm, ContactForm, LoginForm, SignUpForm
 
 logger = logging.getLogger(__name__)
 
@@ -170,6 +174,66 @@ def _send_contact_email(contact_msg):
 # Views
 # ---------------------------------------------------------------------------
 
+def _safe_next_url(request):
+    next_url = request.POST.get('next') or request.GET.get('next', '')
+    parsed = urlparse(next_url)
+    if next_url and not parsed.netloc and not parsed.scheme and next_url.startswith('/'):
+        return next_url
+    return 'home'
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    next_url = _safe_next_url(request)
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            messages.success(request, f'Welcome back, {request.user.username}!')
+            return redirect(next_url)
+    else:
+        form = LoginForm(request)
+
+    return render(request, 'website/login.html', {
+        'form': form,
+        'next_url': request.GET.get('next', ''),
+        'page': 'auth',
+    })
+
+
+def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f'Welcome to MK Tech Solutions, {user.username}!')
+            return redirect('home')
+    else:
+        form = SignUpForm()
+
+    return render(request, 'website/signup.html', {
+        'form': form,
+        'page': 'auth',
+    })
+
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        messages.success(request, 'You have been logged out.')
+    return redirect('home')
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'website/profile.html', {'page': 'profile'})
+
 def home(request):
     try:
         active_jobs = JobListing.objects.filter(is_active=True)[:3]
@@ -193,11 +257,21 @@ def about(request):
 
 
 def jobs(request):
+    search_query = request.GET.get('q', '').strip()
     department  = request.GET.get('department', '')
     job_type    = request.GET.get('job_type', '')
 
     try:
         all_jobs = JobListing.objects.filter(is_active=True)
+        if search_query:
+            from django.db.models import Q
+            all_jobs = all_jobs.filter(
+                Q(title__icontains=search_query)
+                | Q(department__icontains=search_query)
+                | Q(location__icontains=search_query)
+                | Q(description__icontains=search_query)
+                | Q(requirements__icontains=search_query)
+            )
         if department:
             all_jobs = all_jobs.filter(department__icontains=department)
         if job_type:
@@ -218,6 +292,7 @@ def jobs(request):
         'job_type_choices': JobListing.JOB_TYPE_CHOICES,
         'selected_department': department,
         'selected_job_type': job_type,
+        'search_query': search_query,
         'page': 'jobs',
     })
 
@@ -274,3 +349,7 @@ def contact(request):
 def contact_success(request):
     """Dedicated thank-you page shown after a contact form is submitted."""
     return render(request, 'website/contact_success.html', {'page': 'contact'})
+
+
+def terms(request):
+    return render(request, 'website/terms.html', {'page': 'terms'})
